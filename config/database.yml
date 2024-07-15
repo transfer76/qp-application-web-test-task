@@ -4,9 +4,6 @@ default: &default
   pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   timeout: 5000
   database: <%= ENV.fetch('DB', 'volodymyr_chernikov_base') %>
-  username: <%= ENV.fetch('DB_USERNAME', 'root') %>
-  password: <%= ENV.fetch('DB_PASSWORD', '') %>
-  host: <%= ENV.fetch('DB_HOST', '0.0.0.0') %>
   reconnect: true
 
 development:
