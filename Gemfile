@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'http://rubygems.org'
 
 # Build a persistent domain model by mapping database tables to Ruby classes

@@ -1,0 +1,17 @@
+default: &default
+  adapter: <%= ENV.fetch('DB_ADAPTER', 'postgresql') %>
+  encoding: unicode
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
+  timeout: 5000
+  database: <%= ENV.fetch('DB', 'volodymyr_chernikov_base') %>
+  username: <%= ENV.fetch('DB_USERNAME', 'root') %>
+  password: <%= ENV.fetch('DB_PASSWORD', '') %>
+  host: <%= ENV.fetch('DB_HOST', '0.0.0.0') %>
+  reconnect: true
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  database: 'volodymyr_chernikov_test'
