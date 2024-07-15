@@ -19,12 +19,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_15_140914) do
     t.string "name", null: false
     t.string "country", null: false
     t.string "phone"
-    t.string "owner_id", null: false
+    t.string "owner_ids", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["country"], name: "index_companies_on_country"
     t.index ["name"], name: "index_companies_on_name"
-    t.index ["owner_id"], name: "index_companies_on_owner_id"
   end
 
   create_table "owners", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
