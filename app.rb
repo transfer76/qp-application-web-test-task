@@ -6,6 +6,8 @@ require 'sinatra/reloader'
 require 'sinatra/activerecord'
 require 'json'
 require 'securerandom'
+require_relative 'lib/company'
+require_relative 'lib/owner'
 
 # API endpoints
 before do

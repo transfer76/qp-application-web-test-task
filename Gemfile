@@ -5,6 +5,8 @@ source 'http://rubygems.org'
 # Build a persistent domain model by mapping database tables to Ruby classes
 gem 'activerecord', '~> 7.1'
 gem 'json', '~> 2.7'
+gem 'rack', '~> 3.1'
+gem 'rackup', '~> 2.1'
 gem 'rake', '~> 13.2'
 gem 'sinatra', '~> 4.0'
 # Extends Sinatra with ActiveRecords helpers
