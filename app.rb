@@ -9,6 +9,7 @@ require 'securerandom'
 require_relative 'lib/company'
 require_relative 'lib/owner'
 require_relative 'lib/helpers/find_company'
+require 'pry'
 
 # Include helpers methods
 include Helpers
@@ -50,4 +51,18 @@ put '/companies/:id' do
   company[:country] = data['country'] if data['country']
   company[:phone] = data['phone'] if data['phone']
   company.to_json
+end
+
+# Create Owner and add owner to company
+post '/companies/:id/owners' do
+  data = JSON.parse(request.body.read)
+  owner = Owner.create!(
+            name: data['name'],
+            ssn: data['ssn']
+          )
+
+  company = find_company(params['id'])
+  company[:owner_ids].push(owner['id'])
+  company.save
+  owner.to_json
 end
