@@ -15,12 +15,12 @@ gem 'sinatra-activerecord', '~> 2.0'
 gem 'sinatra-contrib', '~> 4.0'
 
 group :development, :test do
-  # Integration testings
-  gem 'capybara', ' ~> 3.40'
   # database
   gem 'pg', '~> 1.5'
   # Debug console
   gem 'pry', '~> 0.14.2'
+  # Integration testings
+  gem 'rack-test', '~> 2.1'
   # Rspec unit tests
   gem 'rspec', '~> 3.13.0'
   # Rubocop linter
