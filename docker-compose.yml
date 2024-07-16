@@ -1,0 +1,20 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: volodymyr_chernikov_base
+    volumes:
+      - ./db:/var/lib/postgresql/data
+  web:
+    build: .
+    command: bundle exec rackup --host 0.0.0.0
+    volumes:
+      - .:/myapp
+    ports:
+      - "4567:4567"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://myapp:password@db/myapp_development
+
