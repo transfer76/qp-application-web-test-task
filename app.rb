@@ -9,14 +9,16 @@ require 'securerandom'
 require_relative 'lib/company'
 require_relative 'lib/owner'
 require_relative 'lib/helpers/find_company'
-require 'pry'
-
-# Include helpers methods
-include Helpers
+require_relative 'lib/helpers/find_owner'
+require_relative 'lib/helpers/check_ssn'
 
 # API endpoints
 before do
   content_type :json
+end
+
+before '/owners/:id/check_ssn' do
+  halt 403, JSON({ error: 'Forbidden' }) unless request.env.fetch('USER_ROLE', 'admin') == 'admin'
 end
 
 # Get list of companies
@@ -65,4 +67,9 @@ post '/companies/:id/owners' do
   company[:owner_ids].push(owner['id'])
   company.save
   owner.to_json
+end
+
+get '/owners/:id/check_ssn' do
+  owner = find_owner(params['id'])
+  JSON(ssn: owner[:ssn], validity: check_ssn)
 end
