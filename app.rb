@@ -11,7 +11,6 @@ require_relative 'lib/owner'
 require_relative 'lib/helpers/find_company'
 require_relative 'lib/helpers/find_owner'
 require_relative 'lib/helpers/check_ssn'
-require 'pry'
 
 # API endpoints
 before do

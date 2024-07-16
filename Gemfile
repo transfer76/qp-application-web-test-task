@@ -15,6 +15,7 @@ gem 'sinatra-activerecord', '~> 2.0'
 gem 'sinatra-contrib', '~> 4.0'
 
 group :development, :test do
+  gem 'database_cleaner-active_record', '~> 2.0'
   # database
   gem 'pg', '~> 1.5'
   # Debug console

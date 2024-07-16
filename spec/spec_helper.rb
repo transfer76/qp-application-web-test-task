@@ -3,6 +3,7 @@
 ENV['RACK_ENV'] ||= 'test'
 
 require File.expand_path '../../app.rb', __FILE__
+require './config/environment'
 require 'rspec'
 require 'rack/test'
 require 'database_cleaner/active_record'
