@@ -1,54 +1,103 @@
-# Application Code Assignment
+# `qp-application-web-service-viefsz` - Application Code Assignment
 
-We do not expect you to spend more than 4 hours on this. Feel free to spend more if you enjoy the exercise. It is perfectly fine to leave many rough edges or even parts untouched!
+Sinatra Web App for managing Companies and their Owners
 
-Feel free to take any decision and think up somewhat realistic practical scenario. Please explain your decisions and scenario, either as comments in the code or in a README.
+## Table of Contents
 
-### Web service
-Create a tiny REST web service in Ruby, Node.js, Python or Go using a framework (e.g. Sinatra or similar) that is runnable with docker. 
-The API should have two concepts: company and owner.
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Configuring](#configuring)
+- [Local Testing](local-testing)
 
-A company has the following attributes:
-- Company Name
-- Country
-- Phone Number (optional)
-- One or more owners
+## Features
 
-An owner has the following attributes:
-- Name
-- Social Security Number 
+- Ability to run aaplication as Rackup app
+- Ability to create new Companies
+- Ability to create Owners and add them to Companies
 
-The API *may* support:
-- Create new company
-- Get a list of all companies
-- Get details about a company
-- Update a company
-- Add an owner of the company
-- Check Social Security Number
+## Requirements
 
-Simulate a backend that can check the Social Security Number by randomly returning "valid/invalid".
+Ruby MRI 3.1.0
 
-The API should define at least two access groups; e.g. one that will not be able to read the Social Security Number. You do not need consider the security of authenticating to the web service, but propose a protocol/method and justify your choice.
+## Instalation
 
+- Clone repo to your local machine
+- Get your terminal window to app directory
+```
+cd ./path/qp-application-web-service-viefsz
+```
+- Set ruby version to 3.1.0
+- Bundle
+```
+Bundle install
+```
+- Set DB migrations
+```
+rake db:create
+rake db:migrate
+```
 
-### README
+## Usage
 
-Write a good README in Markdown, Restructered Text or alike. 
+- Run applicaation, in terminal:
+```
+ruby app.rb
+```
+- Open one more terminal to make requests
+  
+  We have such endpoints:
+  - post '/companies'
+  - get '/companies'
+  - get '/companies/:id'
+  - put '/companies/:id'
+  - post '/companies/:id/owners'
+  - get '/owners/:id/check_ssn'
 
-The README should explain how to
-- setup and run the service using docker
-- query the API using cURL
+  To make request do:
+  
+  - To get Companiies list
+  ```
+  curl localhost:4567/companies
+  ```
 
+  - To create company
+  ```
+  curl -X POST localhost:4567/companies -H "Content-Type: application/json" -d '{"name": "Jappware", "country": "Ukraine"}'
+  ```
 
-### Considerations
-- How can the service be made redundant? What considerations should you do?
-- Is the service scalable? What changes could be made to improve scalability?
-- Can the API be made idempotent?
-- What changes should be made to support multiple backends for checking the Social Security Number?
+  - To get details about the company(set your :id)
+  ```
+  curl localhost:4567/companies/"6ca0b356-0809-48be-89f0-c49fb31828f4"
+  ```
 
-### CodeSubmit
+  - To put company
+  ```
+  curl -X PUT localhost:4567/companies/"6ca0b356-0809-48be-89f0-c49fb31828f4" -H "Content-Type: application/json" -d '{"name": "Lviv", "country": "Ukrain", "owner_id": "SecureRandom2"}'
+  ```
 
-Please organize, design, test and document your code as if it were going into production - then push your changes to the master branch. After you have pushed your code, you may 
-submit the assignment on the assignment page.
+  - To create Owner and Add owner id to company
+  ```
+  curl -X POST localhost:4567/companies/"6ca0b356-0809-48be-89f0-c49fb31828f4"/owners -H "Content-Type: application/json" -d '{"name": "Vitya", "ssn": "ssn7"}'
+  ```
 
-All the best and happy coding,
+## Configuring
+
+- Start Docker
+```
+docker build -t qp-application-web-service-viefsz .
+docker run -p 4567:4567 qp-application-web-service-viefsz
+```
+
+## Local Testing
+
+Run in terminal
+```
+bundle exec rspec
+```
+
+Note: if you will encounter DB errors, please try:
+```
+RACK_ENV=test rake db:drop db:create db:migrate
+```
