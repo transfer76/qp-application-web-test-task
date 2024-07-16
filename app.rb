@@ -11,6 +11,7 @@ require_relative 'lib/owner'
 require_relative 'lib/helpers/find_company'
 require_relative 'lib/helpers/find_owner'
 require_relative 'lib/helpers/check_ssn'
+require 'pry'
 
 # API endpoints
 before do
@@ -27,31 +28,40 @@ get '/companies' do
     data: {
       companies: Company.all
     }
-  }.to_json
+  }.to_json(include: :owners)
 end
 
 # Create a new company
 post '/companies' do
   data = JSON.parse(request.body.read)
-  Company.create!(
+  company = Company.create!(
     name: data['name'],
     country: data['country'],
     phone: data['phone']
   )
+
+  company.to_json
 end
 
 # Get details about company by :id
 get '/companies/:id' do
-  find_company(params['id']).to_json
+  company = find_company(params['id'])
+  halt 404, { message: 'Company not found' }.to_json unless company
+
+  company.to_json
 end
 
 # Update the company
 put '/companies/:id' do
   data = JSON.parse(request.body.read)
   company = find_company(params['id'])
-  company[:name] = data['name'] if data['name']
-  company[:country] = data['country'] if data['country']
-  company[:phone] = data['phone'] if data['phone']
+  halt 404, { message: 'Company not found' }.to_json unless company
+  company.update(
+    name: data['name'],
+    country: data['country'],
+    phone: data['phone']
+  )
+
   company.to_json
 end
 
@@ -59,17 +69,21 @@ end
 post '/companies/:id/owners' do
   data = JSON.parse(request.body.read)
   owner = Owner.create!(
-            name: data['name'],
-            ssn: data['ssn']
-          )
+    name: data['name'],
+    ssn: data['ssn'],
+    company_id: params['id']
+  )
 
-  company = find_company(params['id'])
-  company[:owner_ids].push(owner['id'])
-  company.save
+  halt 404, { message: 'Company not found' }.to_json unless owner.company
+  owner.company[:owner_ids].push(owner['id'])
+  owner.company.save
+
   owner.to_json
 end
 
+# Check Sosial Security Number
 get '/owners/:id/check_ssn' do
   owner = find_owner(params['id'])
+  halt 404, json({ error: 'Owner not found' }) unless owner
   JSON(ssn: owner[:ssn], validity: check_ssn)
 end
